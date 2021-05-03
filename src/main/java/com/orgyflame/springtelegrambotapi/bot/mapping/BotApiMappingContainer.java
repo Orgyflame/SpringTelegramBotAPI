@@ -2,23 +2,22 @@ package com.orgyflame.springtelegrambotapi;
 
 import com.orgyflame.springtelegrambotapi.api.method.commands.SetMyCommands;
 import com.orgyflame.springtelegrambotapi.api.method.updates.SetWebhook;
+import com.orgyflame.springtelegrambotapi.api.object.ApiResponse;
 import com.orgyflame.springtelegrambotapi.api.object.commands.BotCommand;
 import com.orgyflame.springtelegrambotapi.api.service.TelegramApiService;
 import com.orgyflame.springtelegrambotapi.exceptions.BotApiMappingContainerException;
 import com.orgyflame.springtelegrambotapi.exceptions.TelegramApiValidationException;
+import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class BotApiMappingContainer {
-    private Map<String, BotApiMapping> mappingMap;
+    private final Map<String, BotApiMapping> mappingMap = new HashMap<>();
 
     public void addMapping(String path, BotApiMapping botApiMapping){
-        if(path.charAt(0) != '/'){
-            throw new BotApiMappingContainerException("Command must start with /");
-        }
-
         if(mappingMap.containsKey(path)) {
             throw new BotApiMappingContainerException("BotMapping with command " + path + " already add");
         }
@@ -39,7 +38,8 @@ public class BotApiMappingContainer {
         });
 
         try {
-            telegramApiService.sendApiMethod(setMyCommands);
+            Mono<ApiResponse> apiResponseMono = telegramApiService.sendApiMethod(setMyCommands);
+            apiResponseMono.subscribe();
         } catch (TelegramApiValidationException e) {
             e.printStackTrace();
         }

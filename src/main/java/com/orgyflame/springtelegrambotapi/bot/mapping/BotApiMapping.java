@@ -15,7 +15,7 @@ public class BotApiMapping {
     private Object bean;
     private Method method;
 
-    public Mono<BotApiMethod> execute(Update update) throws InvocationTargetException, IllegalAccessException {
-        return (Mono<BotApiMethod>) method.invoke(bean, update);
+    public void execute(Update update) throws InvocationTargetException, IllegalAccessException {
+        method.invoke(bean, update);
     }
 }

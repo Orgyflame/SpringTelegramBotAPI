@@ -1,13 +1,16 @@
 package com.orgyflame.springtelegrambotapi;
 
 import com.orgyflame.springtelegrambotapi.api.method.updates.SetWebhook;
+import com.orgyflame.springtelegrambotapi.api.object.ApiResponse;
 import com.orgyflame.springtelegrambotapi.api.service.TelegramApiService;
 import com.orgyflame.springtelegrambotapi.bot.BotController;
-import com.orgyflame.springtelegrambotapi.bot.BotRequestMapping;
+import com.orgyflame.springtelegrambotapi.bot.BotMapping;
 import com.orgyflame.springtelegrambotapi.bot.TelegramBotProperties;
+import com.orgyflame.springtelegrambotapi.exceptions.TelegramApiValidationException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
+import reactor.core.publisher.Mono;
 
 import java.lang.reflect.Method;
 import java.util.Map;
@@ -32,7 +35,7 @@ public class TelegramBotListener implements ApplicationListener<ContextRefreshed
                 (name, botController) -> {
                     Method[] methods = botController.getClass().getDeclaredMethods();
                     for(Method method: methods){
-                        BotRequestMapping annotation = method.getAnnotation(BotRequestMapping.class);
+                        BotMapping annotation = method.getAnnotation(BotMapping.class);
 
                         if(annotation == null) continue;
 
@@ -50,5 +53,12 @@ public class TelegramBotListener implements ApplicationListener<ContextRefreshed
     private void registerWebhook() {
         SetWebhook setWebhook = new SetWebhook();
         setWebhook.setUrl(telegramBotProperties.getHostUrl() + "/callback/" + telegramBotProperties.getToken());
+
+        try {
+            Mono<ApiResponse> apiResponseMono = telegramApiService.sendApiMethod(setWebhook);
+            apiResponseMono.subscribe();
+        } catch (TelegramApiValidationException e) {
+            e.printStackTrace();
+        }
     }
 }

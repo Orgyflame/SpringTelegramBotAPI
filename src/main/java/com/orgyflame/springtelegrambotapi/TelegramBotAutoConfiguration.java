@@ -3,6 +3,7 @@ package com.orgyflame.springtelegrambotapi;
 import com.orgyflame.springtelegrambotapi.api.object.Update;
 import com.orgyflame.springtelegrambotapi.api.service.TelegramApiService;
 import com.orgyflame.springtelegrambotapi.bot.TelegramBotProperties;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -16,22 +17,32 @@ import reactor.core.publisher.Mono;
 @Configuration
 @EnableConfigurationProperties(TelegramBotProperties.class)
 public class TelegramBotConfiguration {
-    private final TelegramBotProperties telegramBotProperties;
-
-    public TelegramBotConfiguration(TelegramBotProperties telegramBotProperties) {
-        this.telegramBotProperties = telegramBotProperties;
-
-    }
+    @Autowired
+    private TelegramBotProperties telegramBotProperties;
 
 
     @Bean
     @ConditionalOnMissingBean
+    @ConditionalOnBean(TelegramApiService.class)
     public TelegramBotListener telegramBotListener(ApplicationContext context){
         return new TelegramBotListener(context, telegramBotProperties);
     }
 
+    @Bean
+    @ConditionalOnMissingBean
+    public BotUpdateHandlerService botUpdateHandlerService(){
+        return new BotUpdateHandlerService();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public TelegramApiService telegramApiService(){
+        return new TelegramApiService(telegramBotProperties);
+    }
+
     @Component
-    private static class BotUpdateHandler {
+    @ConditionalOnBean(BotUpdateHandlerService.class)
+    private class BotUpdateHandler {
         private final BotUpdateHandlerService botUpdateHandlerService;
 
         private BotUpdateHandler(BotUpdateHandlerService botUpdateHandlerService) {
