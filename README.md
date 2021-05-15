@@ -11,14 +11,14 @@ Just import add the library to your project with one of these options:
 * Using Maven:
     ```xml
     <dependency>
-    <groupId>com.orgyflame</groupId>
+    <groupId>io.github.orgyflame</groupId>
     <artifactId>telegram-bot-api-spring-boot-starter</artifactId>
     <version>5.2.0</version>
    </dependency>
    ```
 * Using Gradle:
 ```groovy
-implementation 'com.orgyflame:telegram-bot-api-spring-boot-starter:5.2.0'
+implementation 'io.github.orgyflame:telegram-bot-api-spring-boot-starter:5.2.0'
 ```
 
 ### Add properties
