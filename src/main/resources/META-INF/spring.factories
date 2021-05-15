@@ -1,1 +1,2 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.orgyflame.springtelegrambotapi.TelegramBotConfiguration
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.orgyflame.springtelegrambotapi.TelegramBotAutoConfiguration

@@ -1,5 +1,6 @@
 package com.orgyflame.springtelegrambotapi.api.object.replykeyboard.buttons;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.orgyflame.springtelegrambotapi.api.object.BotApiObject;
 import com.orgyflame.springtelegrambotapi.api.Validable;
@@ -32,6 +33,7 @@ public class KeyboardButton implements Validable, BotApiObject {
     private static final String REQUEST_CONTACT_FIELD = "request_contact";
     private static final String REQUEST_LOCATION_FIELD = "request_location";
     private static final String REQUEST_POLL_FIELD = "request_poll";
+
     /**
      * Text of the button.
      * If none of the optional fields are used, it will be sent to the bot as a message when the button is pressed

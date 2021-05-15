@@ -1,10 +1,7 @@
-package com.orgyflame.springtelegrambotapi;
+package com.orgyflame.springtelegrambotapi.bot.mapping;
 
-import com.orgyflame.springtelegrambotapi.api.method.BotApiMethod;
-import com.orgyflame.springtelegrambotapi.api.object.Update;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import reactor.core.publisher.Mono;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -14,8 +11,9 @@ import java.lang.reflect.Method;
 public class BotApiMapping {
     private Object bean;
     private Method method;
+    private String description;
 
-    public void execute(Update update) throws InvocationTargetException, IllegalAccessException {
-        method.invoke(bean, update);
+    public void execute(Object[] args) throws InvocationTargetException, IllegalAccessException {
+        method.invoke(bean, args);
     }
 }

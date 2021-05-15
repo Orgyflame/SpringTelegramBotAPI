@@ -28,6 +28,8 @@ public class BotCommand implements BotApiObject, Validable {
     @JsonProperty(COMMAND_FIELD)
     @NonNull
     private String command; ///< Value of the dice, 1-6
+
+    //todo: delete temp
     @JsonProperty(DESCRIPTION_FIELD)
     @NonNull
     private String description; ///< Description of the command, 3-256 characters.

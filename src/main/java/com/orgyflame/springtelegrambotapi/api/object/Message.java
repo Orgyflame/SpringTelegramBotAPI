@@ -9,15 +9,18 @@ import com.orgyflame.springtelegrambotapi.api.object.payments.Invoice;
 import com.orgyflame.springtelegrambotapi.api.object.payments.SuccessfulPayment;
 import com.orgyflame.springtelegrambotapi.api.object.polls.Poll;
 import com.orgyflame.springtelegrambotapi.api.object.replykeyboard.InlineKeyboardMarkup;
+import com.orgyflame.springtelegrambotapi.api.object.replykeyboard.buttons.InlineKeyboardButton;
 import com.orgyflame.springtelegrambotapi.api.object.stickers.Sticker;
 import com.orgyflame.springtelegrambotapi.api.object.voicechat.VoiceChatEnded;
 import com.orgyflame.springtelegrambotapi.api.object.voicechat.VoiceChatParticipantsInvited;
 import com.orgyflame.springtelegrambotapi.api.object.voicechat.VoiceChatScheduled;
 import com.orgyflame.springtelegrambotapi.api.object.voicechat.VoiceChatStarted;
+import com.orgyflame.springtelegrambotapi.bot.inline.menu.InlineMenu;
 import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Ruben Bermudez
@@ -278,6 +281,7 @@ public class Message implements BotApiObject {
         }
         return captionEntities;
     }
+
 
     @JsonIgnore
     public List<User> getNewChatMembers() {

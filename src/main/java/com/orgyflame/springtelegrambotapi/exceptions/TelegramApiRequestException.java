@@ -20,7 +20,6 @@ package com.orgyflame.springtelegrambotapi.exceptions;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.orgyflame.springtelegrambotapi.api.object.ApiResponse;
 import com.orgyflame.springtelegrambotapi.api.object.ResponseParameters;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,18 +47,7 @@ public class TelegramApiRequestException extends TelegramApiException {
         super(message);
     }
 
-    public TelegramApiRequestException(String message, JSONObject object) {
-        super(message);
-        apiResponse = object.getString(ERRORDESCRIPTIONFIELD);
-        errorCode = object.getInt(ERRORCODEFIELD);
-        if (object.has(PARAMETERSFIELD)) {
-            try {
-                parameters = OBJECT_MAPPER.readValue(object.getJSONObject(PARAMETERSFIELD).toString(), ResponseParameters.class);
-            } catch (IOException e) {
-                log.error(e.getLocalizedMessage(), e);
-            }
-        }
-    }
+
 
     public TelegramApiRequestException(String message, ApiResponse response) {
         super(message);

@@ -8,13 +8,17 @@ import com.orgyflame.springtelegrambotapi.api.method.ParseMode;
 import com.orgyflame.springtelegrambotapi.api.object.ApiResponse;
 import com.orgyflame.springtelegrambotapi.api.object.Message;
 import com.orgyflame.springtelegrambotapi.api.object.MessageEntity;
+import com.orgyflame.springtelegrambotapi.api.object.replykeyboard.InlineKeyboardMarkup;
 import com.orgyflame.springtelegrambotapi.api.object.replykeyboard.ReplyKeyboard;
+import com.orgyflame.springtelegrambotapi.api.object.replykeyboard.buttons.InlineKeyboardButton;
+import com.orgyflame.springtelegrambotapi.bot.inline.menu.InlineMenu;
 import com.orgyflame.springtelegrambotapi.exceptions.TelegramApiRequestException;
 import com.orgyflame.springtelegrambotapi.exceptions.TelegramApiValidationException;
 import lombok.*;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Ruben Bermudez
@@ -64,6 +68,25 @@ public class SendMessage extends BotApiMethod<Message> {
     private List<MessageEntity> entities; ///< Optional. List of special entities that appear in message text, which can be specified instead of parse_mode
     @JsonProperty(ALLOWSENDINGWITHOUTREPLY_FIELD)
     private Boolean allowSendingWithoutReply; ///< Optional	Pass True, if the message should be sent even if the specified replied-to message is not found
+
+    public void setReplyMarkup(InlineMenu inlineMenu){
+        List<List<InlineKeyboardButton>> keyboard = inlineMenu.getKeyboard().stream().map(
+                inlineMenuButtons -> inlineMenuButtons.stream().map(
+                        inlineMenuButton -> InlineKeyboardButton.builder()
+                                .text(inlineMenuButton.getText())
+                                .url(inlineMenuButton.getUrl())
+                                .callbackData(inlineMenuButton.getUuid())
+                                .build()
+                ).collect(Collectors.toList())
+        ).collect(Collectors.toList());
+
+        this.setReplyMarkup(new InlineKeyboardMarkup(keyboard));
+    }
+
+    public void setReplyMarkup(ReplyKeyboard replyMarkup) {
+        this.replyMarkup = replyMarkup;
+    }
+
 
     public void disableWebPagePreview() {
         disableWebPagePreview = true;

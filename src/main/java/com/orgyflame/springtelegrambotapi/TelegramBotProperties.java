@@ -1,4 +1,4 @@
-package com.orgyflame.springtelegrambotapi.bot;
+package com.orgyflame.springtelegrambotapi;
 
 import lombok.Data;
 import lombok.Getter;
@@ -12,4 +12,5 @@ public class TelegramBotProperties {
     private String token;
     private String username;
     private String hostUrl;
+    private String callbackMapping;
 }

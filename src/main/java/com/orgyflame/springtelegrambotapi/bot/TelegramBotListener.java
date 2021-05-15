@@ -1,11 +1,13 @@
-package com.orgyflame.springtelegrambotapi;
+package com.orgyflame.springtelegrambotapi.bot;
 
 import com.orgyflame.springtelegrambotapi.api.method.updates.SetWebhook;
 import com.orgyflame.springtelegrambotapi.api.object.ApiResponse;
 import com.orgyflame.springtelegrambotapi.api.service.TelegramApiService;
-import com.orgyflame.springtelegrambotapi.bot.BotController;
-import com.orgyflame.springtelegrambotapi.bot.BotMapping;
-import com.orgyflame.springtelegrambotapi.bot.TelegramBotProperties;
+import com.orgyflame.springtelegrambotapi.TelegramBotProperties;
+import com.orgyflame.springtelegrambotapi.bot.container.BotApiMappingContainer;
+import com.orgyflame.springtelegrambotapi.bot.mapping.BotApiMapping;
+import com.orgyflame.springtelegrambotapi.bot.mapping.BotController;
+import com.orgyflame.springtelegrambotapi.bot.mapping.BotMapping;
 import com.orgyflame.springtelegrambotapi.exceptions.TelegramApiValidationException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
@@ -21,11 +23,11 @@ public class TelegramBotListener implements ApplicationListener<ContextRefreshed
     private final TelegramBotProperties telegramBotProperties;
     private final TelegramApiService telegramApiService;
 
-    public TelegramBotListener(ApplicationContext applicationContext, TelegramBotProperties telegramBotProperties) {
+    public TelegramBotListener(ApplicationContext applicationContext, TelegramBotProperties telegramBotProperties, BotApiMappingContainer botApiMappingContainer) {
         this.applicationContext = applicationContext;
         this.telegramBotProperties = telegramBotProperties;
         this.telegramApiService = applicationContext.getBean(TelegramApiService.class);
-        this.botApiMappingContainer = new BotApiMappingContainer();
+        this.botApiMappingContainer = botApiMappingContainer;
     }
 
     @Override
@@ -39,12 +41,11 @@ public class TelegramBotListener implements ApplicationListener<ContextRefreshed
 
                         if(annotation == null) continue;
 
-                        botApiMappingContainer.addMapping(annotation.value(), new BotApiMapping(botController, method));
+                        botApiMappingContainer.addMapping(annotation.value(), new BotApiMapping(botController, method, annotation.description()));
                     }
                 }
         );
 
-        applicationContext.getBean(BotUpdateHandlerService.class).setBotApiMappingContainer(botApiMappingContainer);
         botApiMappingContainer.registerCommands(telegramApiService);
 
         registerWebhook();
@@ -52,7 +53,7 @@ public class TelegramBotListener implements ApplicationListener<ContextRefreshed
 
     private void registerWebhook() {
         SetWebhook setWebhook = new SetWebhook();
-        setWebhook.setUrl(telegramBotProperties.getHostUrl() + "/callback/" + telegramBotProperties.getToken());
+        setWebhook.setUrl(telegramBotProperties.getHostUrl() + telegramBotProperties.getCallbackMapping());
 
         try {
             Mono<ApiResponse> apiResponseMono = telegramApiService.sendApiMethod(setWebhook);

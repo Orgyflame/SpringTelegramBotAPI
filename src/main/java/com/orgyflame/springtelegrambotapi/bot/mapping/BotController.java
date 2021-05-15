@@ -1,4 +1,4 @@
-package com.orgyflame.springtelegrambotapi.bot;
+package com.orgyflame.springtelegrambotapi.bot.mapping;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PostMapping;

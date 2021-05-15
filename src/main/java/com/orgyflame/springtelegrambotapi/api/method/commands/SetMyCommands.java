@@ -10,6 +10,7 @@ import com.orgyflame.springtelegrambotapi.exceptions.TelegramApiValidationExcept
 import lombok.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -36,7 +37,7 @@ public class SetMyCommands extends BotApiMethod<Boolean> {
     @JsonProperty(COMMANDS_FIELD)
     @Singular
     @NonNull
-    private List<BotCommand> commands;
+    private List<BotCommand> commands = new ArrayList<>();
 
     @Override
     public String getMethod() {

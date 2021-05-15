@@ -1,12 +1,15 @@
-package com.orgyflame.springtelegrambotapi.bot;
+package com.orgyflame.springtelegrambotapi.bot.mapping.parameter;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Target({ElementType.METHOD})
+/**
+ * Get text from Message
+ */
+@Target(ElementType.PARAMETER)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface BotMapping {
-    String value() default "";
+public @interface TextParam {
+
 }
